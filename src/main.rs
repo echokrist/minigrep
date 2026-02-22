@@ -11,7 +11,7 @@ fn main() {
         process::exit(1);
     });
 
-    println!("-- Setup ---");
+    println!("--- Setup ---");
     println!("Search query: {}", config.query);
     println!("Filepath: {}", config.file_path);
     println!("Case sensitive: {}", config.case_sensitive);
@@ -31,12 +31,12 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
         .peekable();
 
     if results.peek().is_some() {
-        println!("-- Search results found ---");
+        println!("--- Search results found ---");
         for line in results {
             println!("{}", line);
         }
     } else {
-        eprint!("-- No search results found ---")
+        eprint!("--- No search results found ---")
     }
 
     Ok(())
