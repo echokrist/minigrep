@@ -11,6 +11,7 @@ fn main() {
         process::exit(1);
     });
 
+    println!("-- Setup ---");
     println!("Search query: {}", config.query);
     println!("Filepath: {}", config.file_path);
     println!("");
@@ -24,19 +25,17 @@ fn main() {
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(&config.file_path).expect("Should be able to read file");
 
-    let mut found: bool = false;
-    for line in search(&config.query, &contents, config.ignore_case) {
-        if !line.is_empty() {
-            println!("{}", line);
-            found = true;
-        }
-    }
+    let mut results = search(&config.query, &contents, config.ignore_case)
+        .filter(|line| !line.is_empty())
+        .peekable();
 
-    if !found {
-        eprint!(
-            "Could not find query: {} in file: {}",
-            &config.query, &config.file_path
-        );
+    if results.peek().is_some() {
+        println!("-- Search results found ---");
+        for line in results {
+            println!("{}", line);
+        }
+    } else {
+        eprint!("-- No search results found ---")
     }
 
     Ok(())
