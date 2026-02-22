@@ -14,6 +14,7 @@ fn main() {
     println!("-- Setup ---");
     println!("Search query: {}", config.query);
     println!("Filepath: {}", config.file_path);
+    println!("Case sensitive: {}", config.case_sensitive);
     println!("");
 
     if let Err(e) = run(config) {
@@ -25,7 +26,7 @@ fn main() {
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(&config.file_path).expect("Should be able to read file");
 
-    let mut results = search(&config.query, &contents, config.ignore_case)
+    let mut results = search(&config.query, &contents, &config.case_sensitive)
         .filter(|line| !line.is_empty())
         .peekable();
 
@@ -44,7 +45,7 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
 struct Config {
     pub query: String,
     pub file_path: String,
-    pub ignore_case: bool,
+    pub case_sensitive: bool,
 }
 
 impl Config {
@@ -61,12 +62,15 @@ impl Config {
             None => return Err("Didn't get a file path."),
         };
 
-        let ignore_case = env::var("IGNORE_CASE").is_ok();
+        let case_sensitivite = match args.next() {
+            Some(_arg) => true,
+            None => false,
+        };
 
         Ok(Config {
             query,
             file_path,
-            ignore_case,
+            case_sensitive: case_sensitivite,
         })
     }
 }

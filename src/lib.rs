@@ -21,9 +21,9 @@ where
 pub fn search<'a>(
     query: &str,
     contents: &'a str,
-    case_sensitive: bool,
+    case_sensitive: &bool,
 ) -> impl Iterator<Item = &'a str> {
-    if case_sensitive {
+    if *case_sensitive {
         SearchIterator::Left(contents.lines().filter(move |line| line.contains(query)))
     } else {
         // Optimization: Pre-lowercase once
@@ -50,7 +50,7 @@ safe, fast, productive.
 Pick three.
 Duct tape.";
 
-        let results: Vec<&str> = search(query, contents, true).collect();
+        let results: Vec<&str> = search(query, contents, &true).collect();
 
         assert_eq!(vec!["safe, fast, productive."], results);
     }
@@ -64,7 +64,7 @@ safe, fast, productive.
 Pick three.
 Trust me.";
 
-        let results: Vec<&str> = search(query, contents, false).collect();
+        let results: Vec<&str> = search(query, contents, &false).collect();
         assert_eq!(vec!["Rust:", "Trust me."], results);
     }
 }
