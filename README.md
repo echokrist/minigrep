@@ -8,22 +8,22 @@ I added some personal changes to how it works and performs.
 
 The following syntax is how to run the minigrep program
 ```bash
-cargo run -- {searchquery} {filepath}
+cargo run -- {searchquery} {filepath} {case-sensitive}
 ```
 
 Using the syntax above, here is a working example:
 ```bash
-cargo run -- somebody poem.txt
+cargo run -- somebody poem.txt true
 
-Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.06s
-     Running `target/debug/minigrep somebody poem.txt`
+
+Outputs:
 -- Setup ---
 Search query: somebody
 Filepath: poem.txt
+Case sensitive: true
 
 -- Search results found ---
 How dreary to be somebody!
-
 ```
 
 
@@ -35,6 +35,7 @@ Search example
 -- Setup ---
 Search query: somebody
 Filepath: poem.txt
+Case sensitive: false
 
 -- Search results found ---
 How dreary to be somebody!
@@ -48,6 +49,7 @@ If you search for something that does not exist
 -- Setup ---
 Search query: javascript
 Filepath: poem.txt
+Case sensitive: false
 
 -- No search results found ---⏎    
 ```
